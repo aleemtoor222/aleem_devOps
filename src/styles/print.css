@@ -31,8 +31,7 @@
   .hero-chips,
   [data-hero-term],
   .pipeline-pulse,
-  form,
-  .gh-card { display: none !important; }
+  form { display: none !important; }
 
   *, *::before, *::after {
     animation: none !important;

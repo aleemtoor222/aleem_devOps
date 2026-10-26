@@ -1,9 +1,8 @@
 # Muhammad Aleem · DevOps Engineer portfolio
 
-<!-- TODO: replace <repo> below with the GitHub repository name once it exists (e.g. "portfolio") -->
-[![Deploy to GitHub Pages](https://github.com/aleemtoor222/<repo>/actions/workflows/deploy.yml/badge.svg)](https://github.com/aleemtoor222/<repo>/actions/workflows/deploy.yml)
+[![Deploy to GitHub Pages](https://github.com/aleemtoor222/aleem_devOps/actions/workflows/deploy.yml/badge.svg)](https://github.com/aleemtoor222/aleem_devOps/actions/workflows/deploy.yml)
 
-**Live site:** https://aleemtoor222.github.io/&lt;repo&gt;/ (TODO: fill in the repository name)
+**Live site:** https://aleemtoor222.github.io/aleem_devOps/
 
 ![Screenshot of the portfolio home page](docs/screenshot.png)
 
@@ -47,16 +46,16 @@ npm run preview:pages
 ```
 
 Open http://localhost:3402. Missing pages get the real 404 page, as on GitHub Pages. To build for a GitHub Pages
-project URL such as `https://aleemtoor222.github.io/portfolio/`, set the sub-path first:
+project URL such as `https://aleemtoor222.github.io/aleem_devOps/`, set the sub-path first:
 
 ```powershell
-$env:PAGES_BASE_PATH = "/portfolio"
+$env:PAGES_BASE_PATH = "/aleem_devOps"
 npm run build:pages
 Remove-Item Env:PAGES_BASE_PATH
 npm run preview:pages
 ```
 
-Then open http://localhost:3402/portfolio/.
+Then open http://localhost:3402/aleem_devOps/.
 
 > **Why `build:pages` builds in a copy:** a Next.js 16 static export always writes its intermediate files into
 > `.next\`, the folder `npm start` serves from. `build:pages` therefore copies the sources to `.pages-build\`, builds
@@ -85,7 +84,7 @@ npm run test:e2e
 `test:e2e` starts the preview on port 3402 if it is not already running. For a build with a base path:
 
 ```powershell
-$env:E2E_BASE_URL = "http://localhost:3402/portfolio/"
+$env:E2E_BASE_URL = "http://localhost:3402/aleem_devOps/"
 npm run test:e2e
 Remove-Item Env:E2E_BASE_URL
 ```
@@ -121,13 +120,12 @@ Until a real key is set, the form shows "Message not sent" with the email and Wh
    git init -b main
    git add .
    git commit -m "Portfolio"
-   git remote add origin https://github.com/aleemtoor222/portfolio.git
+   git remote add origin https://github.com/aleemtoor222/aleem_devOps.git
    git push -u origin main
    ```
 3. In the repository: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 4. Open the **Actions** tab: the "Deploy to GitHub Pages" run takes 2–3 minutes. The site URL appears in the run
-   summary and under Settings → Pages (for `portfolio` it is `https://aleemtoor222.github.io/portfolio/`).
-5. Replace `<repo>` in the badge and live link at the top of this README.
+   summary and under Settings → Pages (for this repo it is `https://aleemtoor222.github.io/aleem_devOps/`).
 
 A custom domain works too (Settings → Pages → Custom domain): the workflow picks up the new address automatically.
 
@@ -189,7 +187,8 @@ tests/e2e/          Playwright tests
 
 - [ ] Add the Web3Forms access key (`src/content/profile.ts`).
 - [ ] Confirm the contact email: the site uses aleemdevops123@gmail.com, the CV lists muhammadaleemtoor@gmail.com.
-- [ ] Create the GitHub repository, enable Pages (Source: GitHub Actions) and fill in `<repo>` in this README.
+- [x] GitHub repository created: https://github.com/aleemtoor222/aleem_devOps
+- [ ] Enable Pages once: Settings → Pages → Source: GitHub Actions (then re-run the workflow).
 - [ ] Add repository links (`links.code`) and one measurable result (`impact`) for the projects that lack them.
 - [ ] Fill in the case-study sections marked TODO (problem, decisions, results, what I'd improve).
 - [ ] Confirm the service name in "High-Availability Proxies" (SmsBridge or SmsFort).

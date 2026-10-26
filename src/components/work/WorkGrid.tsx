@@ -167,7 +167,8 @@ export default function WorkGrid() {
         </p>
       </div>
 
-      <ul id="work-grid" ref={gridRef} className="work-grid" role="tabpanel" aria-label="Projects" data-reveal-stagger>
+      <div id="work-grid" role="tabpanel" aria-label="Projects">
+      <ul ref={gridRef} className="work-grid" data-reveal-stagger>
         {visible.map((p, i) => {
           const s = spans(visible.length, i);
           return (
@@ -184,6 +185,7 @@ export default function WorkGrid() {
           );
         })}
       </ul>
+      </div>
 
       <dialog ref={dialogRef} className="modal sheet case-modal" aria-labelledby="case-title" onClose={onClose} onClick={closeOnBackdrop}>
         {current && <CaseStudy project={current} onClose={() => dialogRef.current?.close()} />}

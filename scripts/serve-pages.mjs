@@ -10,6 +10,7 @@
 import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
+import zlib from 'node:zlib';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -81,9 +82,13 @@ export function createPagesServer({ dir = path.join(root, 'out'), base = '', log
 
   function send(req, res, status, file, extraHeaders = {}) {
     const type = MIME[path.extname(file).toLowerCase()] ?? 'application/octet-stream';
-    const size = fs.statSync(file).size;
-    res.writeHead(status, { 'Content-Type': type, 'Content-Length': size, 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff', ...extraHeaders });
+    // GitHub Pages compresses text responses; do the same so local Lighthouse numbers match production
+    const gzip = /\bgzip\b/.test(req.headers['accept-encoding'] ?? '') && /^(text\/|application\/(json|xml|manifest)|image\/svg)/.test(type);
+    const body = gzip ? zlib.gzipSync(fs.readFileSync(file)) : null;
+    const size = body ? body.length : fs.statSync(file).size;
+    res.writeHead(status, { 'Content-Type': type, 'Content-Length': size, 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff', ...(body && { 'Content-Encoding': 'gzip', Vary: 'Accept-Encoding' }), ...extraHeaders });
     if (req.method === 'HEAD') return res.end();
+    if (body) return res.end(body);
     fs.createReadStream(file).pipe(res);
   }
   function notFound(req, res) {

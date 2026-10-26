@@ -97,6 +97,7 @@ function execute(raw: string): Line[] | 'clear' {
 
 // Types the intro once, then becomes a real prompt (history, Tab completion, clickable chips)
 export default function HeroTerminal() {
+  const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
   const [chars, setChars] = useState(0);
   const [cleared, setCleared] = useState(false);
@@ -110,14 +111,19 @@ export default function HeroTerminal() {
   const introDone = step >= terminalIntro.length;
 
   useEffect(() => {
-    if (reducedMotion()) setStep(terminalIntro.length);
+    if (reducedMotion()) return setStep(terminalIntro.length);
+    // Wait for an idle moment after load so the typing never competes with hydration
+    const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number };
+    const begin = () => setTimeout(() => setStarted(true), 400);
+    if (w.requestIdleCallback) w.requestIdleCallback(begin, { timeout: 2000 });
+    else setTimeout(begin, 800);
   }, []);
 
   useEffect(() => {
-    if (introDone) return;
+    if (introDone || !started) return;
     const line = terminalIntro[step];
     if (line.kind === 'cmd' && chars < line.text.length) {
-      const t = setTimeout(() => setChars((c) => c + 1), step === 0 && chars === 0 ? 700 : 32);
+      const t = setTimeout(() => setChars((c) => c + 1), 32);
       return () => clearTimeout(t);
     }
     const t = setTimeout(() => {
@@ -125,7 +131,7 @@ export default function HeroTerminal() {
       setChars(0);
     }, line.kind === 'cmd' ? 240 : 380);
     return () => clearTimeout(t);
-  }, [introDone, step, chars]);
+  }, [introDone, started, step, chars]);
 
   useEffect(() => {
     const b = bodyRef.current;

@@ -80,8 +80,9 @@ export default function Header() {
     <>
       <header data-site-header className="site-header" data-scrolled={scrolled || undefined}>
         <div className="container header-row">
-          <a href={homeHash('top')} className="logo" aria-label={`${profile.name}, back to top`}>
+          <a href={homeHash('top')} className="logo">
             <Logo />
+            <span className="sr-only"> — {profile.name}, back to top</span>
           </a>
 
           <nav aria-label="Main" className="nav-desktop">
@@ -101,15 +102,13 @@ export default function Header() {
               type="button"
               className="btn btn-ghost palette-btn"
               onClick={() => emit('open-palette', {})}
-              aria-label="Open command palette"
               aria-keyshortcuts="Control+K Meta+K"
               data-tip="Search & commands"
               data-tip-pos="bottom"
             >
               <SearchIcon />
-              <span className="kbd" aria-hidden="true">
-                {modKey}K
-              </span>
+              <span className="sr-only">Open command palette</span>
+              <span className="kbd">{modKey}K</span>
             </button>
             <ThemeToggle />
             <a href={homeHash('contact')} className="btn btn-primary btn-sm hire-btn">
