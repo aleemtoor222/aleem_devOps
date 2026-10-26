@@ -1,0 +1,58 @@
+/* Printing gives a clean one-column light resume: no navigation, buttons, effects or animations. */
+@media print {
+  :root,
+  [data-theme] {
+    --bg: #fff;
+    --surface-1: #fff;
+    --surface-2: #fff;
+    --surface-3: #fff;
+    --border: #d4d4d4;
+    --border-strong: #bdbdbd;
+    --text-primary: #111;
+    --text-secondary: #222;
+    --text-muted: #444;
+    --accent-green: #0a5c2f;
+    --accent-cyan: #0b4f74;
+    color-scheme: light;
+  }
+  @page { margin: 14mm 14mm 16mm; }
+  html, body { background: #fff !important; color: #111 !important; font-size: 11pt; }
+  body::before { display: none; }
+
+  .no-print,
+  header[data-site-header],
+  .fab-stack,
+  .toast-region,
+  .skip-link,
+  dialog,
+  .btn,
+  .tabs,
+  .term-input-row,
+  .hero-chips,
+  [data-hero-term],
+  .pipeline-pulse,
+  form,
+  .gh-card { display: none !important; }
+
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  [data-reveal], [data-reveal-stagger] > * { opacity: 1 !important; translate: none !important; }
+  .container { max-width: none; padding: 0; }
+  .section { padding-block: 0.5rem 1rem; border: 0 !important; break-inside: auto; }
+  .card, .card-inner, .term { background: #fff !important; border: 0 !important; padding: 0 !important; }
+  .card::before, .card-inner::before { display: none !important; }
+  article, li, .exp-entry { break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; color: #111 !important; }
+  .shimmer { background: none !important; -webkit-text-fill-color: currentColor !important; color: #0a5c2f !important; }
+
+  /* One column everywhere */
+  [class*='grid'], .hero-grid, .bento, .work-grid, .contact-grid, .exp-grid { display: block !important; }
+  [class*='grid'] > *, .bento > *, .work-grid > * { margin-bottom: 0.75rem; }
+  a[href^='http']::after { content: ' (' attr(href) ')'; font-size: 0.85em; color: #444; overflow-wrap: anywhere; }
+  .print-only { display: block !important; }
+}
+.print-only { display: none; }

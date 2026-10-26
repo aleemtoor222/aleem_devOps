@@ -1,0 +1,101 @@
+/* Motion: durations 150–400ms, one easing family, only transform / opacity / filter.
+   prefers-reduced-motion turns all of it off and shows content instantly. */
+
+@property --num {
+  syntax: '<integer>';
+  initial-value: 0;
+  inherits: false;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes ping { 75%, 100% { transform: scale(2.4); opacity: 0; } }
+@keyframes blink { 50% { opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes shimmer-bg { to { background-position: -200% 0; } }
+@keyframes toast-in { from { opacity: 0; transform: translateY(12px) scale(0.98); } }
+@keyframes toast-out { to { opacity: 0; transform: translateY(8px) scale(0.98); } }
+@keyframes modal-in { from { opacity: 0; transform: translateY(16px) scale(0.98); } }
+@keyframes sheet-in { from { transform: translateY(100%); } }
+@keyframes reveal-up { from { opacity: 0; translate: 0 28px; } to { opacity: 1; translate: 0 0; } }
+@keyframes count-up { from { --num: 0; } to { --num: var(--to); } }
+@keyframes text-shimmer { to { background-position: -200% center; } }
+@keyframes grid-drift { to { transform: translate3d(48px, 48px, 0); } }
+@keyframes check-draw { to { stroke-dashoffset: 0; } }
+@keyframes pop-in { from { opacity: 0; transform: scale(0.6); } 70% { transform: scale(1.06); } }
+
+/* Pure-CSS count-up: the visible number is ::after (aria-hidden); the real text sits in .sr-only */
+.count {
+  display: inline-block;
+  min-width: calc(var(--digits, 2) * 1ch);
+  font-variant-numeric: tabular-nums;
+  counter-reset: num var(--num);
+  --num: var(--to);
+}
+.count::after { content: counter(num) attr(data-suffix); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .count { animation: count-up 1.6s var(--ease-out) 0.35s both; }
+
+  /* Reveal on scroll: CSS scroll-driven animations where supported */
+  @supports (animation-timeline: view()) {
+    [data-reveal] {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 24%;
+    }
+    [data-reveal-stagger] > * {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry calc(var(--i, 0) * 3%) cover calc(20% + var(--i, 0) * 3%);
+    }
+  }
+  /* IntersectionObserver fallback (Effects.tsx adds .is-in); only when JS is running */
+  @supports not (animation-timeline: view()) {
+    .js [data-reveal],
+    .js [data-reveal-stagger] > * {
+      transition: opacity 0.6s var(--ease-out), translate 0.6s var(--ease-out);
+      transition-delay: calc(var(--i, 0) * 60ms);
+    }
+    .js [data-reveal]:not(.is-in),
+    .js [data-reveal-stagger]:not(.is-in) > * {
+      opacity: 0;
+      translate: 0 24px;
+    }
+  }
+
+  /* Theme switch: circular reveal from the toggle (View Transitions API) */
+  .theme-vt::view-transition-old(root) { animation: none; }
+  .theme-vt::view-transition-new(root) {
+    animation: theme-reveal var(--dur-3) var(--ease-in-out);
+  }
+}
+
+@keyframes theme-reveal {
+  from { clip-path: circle(0 at var(--vt-x) var(--vt-y)); }
+  to { clip-path: circle(var(--vt-r) at var(--vt-x) var(--vt-y)); }
+}
+
+::view-transition { pointer-events: none; }
+::view-transition-group(*) { animation-duration: var(--dur-3); animation-timing-function: var(--ease-out); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .dot::after,
+  .card::before,
+  .skeleton { animation: none !important; }
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}

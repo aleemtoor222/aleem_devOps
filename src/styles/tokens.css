@@ -1,0 +1,113 @@
+/* Design tokens. Every colour pair used for text passes WCAG AA (4.5:1) on bg and all three surfaces,
+   in both themes (checked: muted is 5.9:1 dark / 5.7:1 light on surface-3). */
+
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #05070a;
+  --surface-1: #0a0f14;
+  --surface-2: #0f161d;
+  --surface-3: #151e28;
+  --border: #1c2733;
+  --border-strong: #2b3a49;
+  --text-primary: #e6edf3;
+  --text-secondary: #aab5c1;
+  --text-muted: #8d9aa7;
+  --accent-green: #3dff9a;
+  --accent-green-strong: #7affb9;
+  --accent-cyan: #38bdf8;
+  --warning: #fbbf24;
+  --error: #ff7070;
+  --on-accent: #04130b;
+  --header-bg: rgb(5 7 10 / 0.72);
+  --grid-line: rgb(56 189 248 / 0.07);
+  --noise-opacity: 0.04;
+  --shadow-1: 0 1px 0 rgb(255 255 255 / 0.03) inset, 0 10px 30px -18px rgb(0 0 0 / 0.8);
+  --shadow-2: 0 30px 80px -24px rgb(0 0 0 / 0.8);
+  --glow-green: 0 0 32px -8px color-mix(in srgb, var(--accent-green) 65%, transparent);
+  --glow-cyan: 0 0 32px -8px color-mix(in srgb, var(--accent-cyan) 60%, transparent);
+  --dot-red: #ff5f57;
+  --dot-yellow: #febc2e;
+  --dot-green: #28c840;
+}
+
+/* "Paper terminal": warm paper, ink text, darker accents for contrast */
+[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f6f3ec;
+  --surface-1: #fcfaf5;
+  --surface-2: #efeadf;
+  --surface-3: #e7e1d3;
+  --border: #ddd5c4;
+  --border-strong: #c4baa5;
+  --text-primary: #17140f;
+  --text-secondary: #3d382f;
+  --text-muted: #5c5547;
+  --accent-green: #0a7038;
+  --accent-green-strong: #075a2c;
+  --accent-cyan: #0b6696;
+  --warning: #8a5300;
+  --error: #b4232a;
+  --on-accent: #ffffff;
+  --header-bg: rgb(246 243 236 / 0.78);
+  --grid-line: rgb(11 102 150 / 0.08);
+  --noise-opacity: 0.05;
+  --shadow-1: 0 1px 0 rgb(255 255 255 / 0.6) inset, 0 10px 30px -20px rgb(60 45 20 / 0.35);
+  --shadow-2: 0 30px 70px -30px rgb(60 45 20 / 0.35);
+  --glow-green: 0 8px 24px -10px color-mix(in srgb, var(--accent-green) 55%, transparent);
+  --glow-cyan: 0 8px 24px -10px color-mix(in srgb, var(--accent-cyan) 50%, transparent);
+}
+
+:root {
+  /* 8px spacing scale */
+  --space-0-5: 0.25rem;
+  --space-1: 0.5rem;
+  --space-1-5: 0.75rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-5: 2.5rem;
+  --space-6: 3rem;
+  --space-8: 4rem;
+  --space-10: 5rem;
+  --space-12: 6rem;
+
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 999px;
+
+  --z-raised: 10;
+  --z-header: 50;
+  --z-fab: 60;
+  --z-toast: 80;
+  --z-skip: 100;
+
+  /* Motion: three durations, one easing family (quint) */
+  --dur-1: 150ms;
+  --dur-2: 250ms;
+  --dur-3: 400ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.83, 0, 0.17, 1);
+
+  /* Fluid type scale */
+  --step--1: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --step-0: clamp(0.9375rem, 0.91rem + 0.14vw, 1.0625rem);
+  --step-1: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --step-2: clamp(1.25rem, 1.12rem + 0.6vw, 1.625rem);
+  --step-3: clamp(1.75rem, 1.4rem + 1.6vw, 2.625rem);
+  --step-4: clamp(2.125rem, 1.35rem + 3.6vw, 4.25rem);
+
+  --container: 1200px;
+  --gutter: 16px;
+  --section-y: clamp(3.5rem, 2.6rem + 3.6vw, 6rem);
+  --header-h: 64px;
+}
+
+@media (min-width: 640px) {
+  :root { --gutter: 24px; }
+}
+@media (min-width: 1024px) {
+  :root { --gutter: 32px; }
+}

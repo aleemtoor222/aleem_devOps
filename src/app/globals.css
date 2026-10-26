@@ -1,0 +1,33 @@
+/* Layer order first. The design-system imports must come before 'tailwindcss': its loader expands that
+   import into rules, and an @import placed after rules is ignored by the browser. */
+@layer theme, base, components, utilities;
+
+/* Design system: tokens → base → components → sections → motion → print */
+@import '../styles/tokens.css';
+@import '../styles/base.css';
+@import '../styles/components.css';
+@import '../styles/sections.css';
+@import '../styles/contact.css';
+@import '../styles/motion.css';
+@import '../styles/print.css';
+
+@import 'tailwindcss';
+
+/* Tailwind utilities read the same tokens, so they follow the theme (bg-surface-1, text-muted, …) */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-fg: var(--text-primary);
+  --color-fg-2: var(--text-secondary);
+  --color-muted: var(--text-muted);
+  --color-accent-green: var(--accent-green);
+  --color-accent-cyan: var(--accent-cyan);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-jetbrains-mono);
+}

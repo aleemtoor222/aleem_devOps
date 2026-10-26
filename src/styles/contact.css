@@ -1,0 +1,248 @@
+/* Contact section, footer and 404 page styles (owned by the contact/footer/deploy work).
+   Tokens only (both themes), hover effects only for fine pointers, motion limited to transform/opacity
+   (plus the sanctioned stroke-draw of the success check mark). */
+@layer components {
+  /* ---------- Contact layout. Mobile: channels → form. Desktop: channels + Save contact left, form right. */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+  }
+  .contact-grid > * { min-width: 0; }
+  @media (min-width: 1024px) {
+    .contact-grid {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: var(--space-5);
+      align-items: start;
+    }
+  }
+
+  .contact-direct { display: grid; gap: var(--space-2); min-width: 0; }
+  .contact-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-2); }
+  .contact-where { color: var(--text-muted); font: 400 var(--step--1) / 1.4 var(--font-mono), ui-monospace, monospace; }
+
+  /* Channel rows: the whole row is the link (stretched ::after); the copy button sits above it */
+  .contact-channels { display: grid; gap: var(--space-1-5); }
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .contact-channels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  .contact-channel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-1-5);
+    min-width: 0;
+    min-height: 68px;
+    padding: var(--space-1-5) var(--space-1) var(--space-1-5) var(--space-1-5);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface-1);
+    box-shadow: var(--shadow-1);
+    transition:
+      border-color var(--dur-2) var(--ease-out),
+      background-color var(--dur-2) var(--ease-out),
+      transform var(--dur-1) var(--ease-out);
+  }
+  .contact-icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex: none;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--surface-2);
+    color: var(--accent-green);
+    transition: transform var(--dur-2) var(--ease-out);
+  }
+  .contact-icon .icon { width: 1.125rem; height: 1.125rem; }
+  .contact-link {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+    border-radius: var(--radius-sm);
+  }
+  .contact-link::after { content: ''; position: absolute; inset: 0; border-radius: var(--radius-lg); }
+  .contact-label {
+    color: var(--text-muted);
+    font: 500 0.75rem / 1.3 var(--font-mono), ui-monospace, monospace;
+    letter-spacing: 0.02em;
+  }
+  .contact-value {
+    color: var(--text-primary);
+    font-weight: 500;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+  .contact-copy { z-index: 1; flex: none; color: var(--text-muted); }
+  .contact-copy[data-copied='true'] { color: var(--accent-green); }
+  @supports selector(:has(*)) {
+    .contact-link:focus-visible { outline: none; }
+    .contact-channel:has(.contact-link:focus-visible) { outline: 2px solid var(--accent-green); outline-offset: 3px; }
+    .contact-channel:has(.contact-link:active) { transform: scale(0.99); }
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .contact-channel:hover {
+      border-color: color-mix(in srgb, var(--accent-green) 45%, var(--border-strong));
+      background: var(--surface-2);
+    }
+    .contact-channel:hover .contact-icon { transform: translateY(-1px) scale(1.04); }
+  }
+
+  .contact-save-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-2); }
+  .contact-save-ext { color: var(--text-muted); font-weight: 500; }
+  .contact-save-hint { flex: 1 1 14rem; min-width: 0; color: var(--text-muted); font-size: var(--step--1); }
+
+  /* ---------- Form (inside a .term window) */
+  .contact-form-body {
+    padding: clamp(1rem, 0.75rem + 1.2vw, 1.5rem);
+    color: var(--text-secondary);
+    font: 400 var(--step-0) / 1.6 var(--font-sans), system-ui, sans-serif;
+  }
+  .contact-form { position: relative; display: grid; gap: var(--space-1); }
+  .form-note { justify-self: end; color: var(--text-muted); font: 400 0.75rem / 1.4 var(--font-mono), ui-monospace, monospace; }
+  .form-note .req { color: var(--accent-green); }
+  .form-row { display: grid; gap: var(--space-1) var(--space-2); }
+  @media (min-width: 640px) {
+    .form-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  .field-group { min-width: 0; }
+  .field-hint[data-near='true'] { color: var(--warning); }
+  .form-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin-top: var(--space-1); }
+  .form-submit { min-width: 11.5rem; }
+  .form-submit[aria-disabled='true'] { cursor: progress; }
+  @media (max-width: 639px) {
+    .form-submit { width: 100%; }
+  }
+
+  /* Honeypot: off-screen for people, still in the DOM for bots */
+  .hp-field {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .form-status { min-width: 0; }
+  .form-result {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-1-5);
+    margin-top: var(--space-1);
+    padding: var(--space-2);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--surface-2);
+    animation: toast-in var(--dur-3) var(--ease-out);
+  }
+  .form-result[data-kind='success'] { border-color: color-mix(in srgb, var(--accent-green) 55%, var(--border-strong)); }
+  .form-result[data-kind='error'] { border-color: color-mix(in srgb, var(--error) 60%, var(--border-strong)); }
+  .form-result[data-kind='error'] > .icon { width: 1.5rem; height: 1.5rem; margin-top: 0.125rem; color: var(--error); }
+  .form-result > div { min-width: 0; }
+  .form-result-title { color: var(--text-primary); font-weight: 600; }
+  .form-result-text { margin-top: 0.25rem; color: var(--text-secondary); font-size: var(--step--1); line-height: 1.55; }
+  .form-fallbacks { display: flex; flex-wrap: wrap; gap: var(--space-1); margin-top: var(--space-2); }
+  @media (max-width: 479px) {
+    .form-fallbacks .btn { width: 100%; }
+  }
+
+  /* Success check mark: circle, then tick, drawn with stroke-dashoffset (instant with reduced motion) */
+  .form-check {
+    width: 2.75rem;
+    height: 2.75rem;
+    flex: none;
+    fill: none;
+    stroke: var(--accent-green);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .form-check-circle { stroke-dasharray: 151; stroke-dashoffset: 151; animation: check-draw var(--dur-3) var(--ease-out) forwards; }
+  .form-check-tick { stroke-dasharray: 36; stroke-dashoffset: 36; animation: check-draw var(--dur-3) var(--ease-out) 220ms forwards; }
+
+  /* ---------- Footer */
+  .site-footer {
+    position: relative;
+    padding-block: var(--space-6) calc(var(--space-6) + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface-1) 60%, var(--bg));
+  }
+  @media (max-width: 767px) {
+    /* room for the floating action buttons */
+    .site-footer { padding-bottom: calc(var(--space-12) + env(safe-area-inset-bottom)); }
+  }
+  .footer-main { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-3); align-items: start; }
+  @media (min-width: 900px) {
+    .footer-main { grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: var(--space-4); }
+  }
+  .footer-brand { min-width: 0; }
+  .footer-logo { color: var(--text-primary); font: 600 1.125rem / 1.2 var(--font-mono), ui-monospace, monospace; letter-spacing: -0.01em; }
+  .footer-logo-tld { color: var(--text-muted); }
+  .footer-copy { margin-top: var(--space-1); color: var(--text-muted); font-size: var(--step--1); }
+  .footer-print { margin-top: var(--space-0-5); color: var(--text-secondary); font-size: var(--step--1); overflow-wrap: anywhere; }
+  .footer-nav ul { display: flex; flex-wrap: wrap; gap: var(--space-0-5); margin-inline: -0.625rem; }
+  .footer-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 44px;
+    padding-inline: 0.625rem;
+    border-radius: var(--radius);
+    color: var(--text-secondary);
+    font: 500 var(--step--1) / 1 var(--font-mono), ui-monospace, monospace;
+    transition: color var(--dur-2) var(--ease-out), background-color var(--dur-2) var(--ease-out), transform var(--dur-1) var(--ease-out);
+  }
+  .footer-nav-idx { color: var(--text-muted); transition: color var(--dur-2) var(--ease-out); }
+  .footer-nav a:active { transform: translateY(1px); }
+  @media (hover: hover) and (pointer: fine) {
+    .footer-nav a:hover { color: var(--text-primary); background: var(--surface-2); }
+    .footer-nav a:hover .footer-nav-idx { color: var(--accent-green); }
+  }
+  .footer-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1); }
+  .footer-social { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+  .footer-build {
+    margin-top: var(--space-4);
+    padding-top: var(--space-2);
+    border-top: 1px dashed var(--border);
+    color: var(--text-muted);
+    font: 400 0.75rem / 1.6 var(--font-mono), ui-monospace, monospace;
+    overflow-wrap: anywhere;
+  }
+  .footer-build code { color: var(--accent-green); }
+
+  /* ---------- 404 */
+  .nf-wrap { display: grid; justify-items: start; gap: var(--space-3); max-width: 44rem; min-width: 0; }
+  .nf-title { font-size: var(--step-4); font-weight: 650; letter-spacing: -0.03em; }
+  .nf-term { width: 100%; }
+  .nf-body p + p { margin-top: 0.25rem; }
+  .nf-path { color: var(--text-primary); overflow-wrap: anywhere; }
+  .nf-error { color: var(--error); font-weight: 600; }
+  .nf-hint { color: var(--text-muted); }
+  .nf-cursor {
+    display: inline-block;
+    width: 0.55em;
+    height: 1.1em;
+    vertical-align: text-bottom;
+    background: var(--accent-green);
+    animation: blink 1.1s steps(1) infinite;
+  }
+
+  /* ---------- Print: contact rows as plain text; the form window and the vCard row are screen-only */
+  @media print {
+    .contact-link::after { position: static; }
+    .contact-channel { min-height: 0; padding: 0.25rem 0; border: 0; }
+    .contact-icon,
+    .contact-form-term,
+    .contact-save-row { display: none; }
+  }
+}
